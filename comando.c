@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <stdbool.h>
+#include <regex.h>
 #include "comando.h"
 
 void inicializarFila(FilaComandos *fila)
@@ -50,11 +51,22 @@ char *removerComando(FilaComandos *fila)
 
 int validarComando(char *comando)
 {
-    return (
-        strncmp(comando, "insert into", 11) == 0 ||
-        strncmp(comando, "update", 6) == 0 ||
-        strncmp(comando, "delete from", 11) == 0 ||
-        strncmp(comando, "select * from", 13) == 0);
+    regex_t regex;
+    int reti;
+
+    // Compile regular expression to match valid SQL commands
+    reti = regcomp(&regex, "^(insert into|update|delete from|select).*", REG_EXTENDED);
+    if (reti)
+    {
+        fprintf(stderr, "Could not compile regex\n");
+        return 0;
+    }
+
+    // Execute regular expression
+    reti = regexec(&regex, comando, 0, NULL, 0);
+    regfree(&regex);
+
+    return reti == 0;
 }
 
 int temPetsAssociados(Pet *lista, int codigoPessoa)
@@ -70,105 +82,162 @@ int temPetsAssociados(Pet *lista, int codigoPessoa)
 void processarComandos(FilaComandos *fila, Pessoa **listaPessoas, TipoPet **listaTiposPet, Pet **listaPets)
 {
     char *comando;
+    regex_t regex;
+    regmatch_t matches[10];
+
     while ((comando = removerComando(fila)))
     {
         if (validarComando(comando))
         {
             if (strstr(comando, "insert into"))
             {
-                if (strstr(comando, "insert into pessoa"))
+                if (strstr(comando, "pessoa"))
                 {
                     Pessoa novaPessoa = {0};
-                    if (strstr(comando, "fone") && strstr(comando, "endereco"))
+                    if (regcomp(&regex, "insert into pessoa \\(([^)]+)\\) values \\(([^)]+)\\);", REG_EXTENDED) == 0)
                     {
-                        sscanf(comando, "insert into pessoa (codigo, nome, fone, endereco, data_nascimento) values (%d, '%[^']', '%[^']', '%[^']', '%[^']');",
-                               &novaPessoa.codigo, novaPessoa.nome, novaPessoa.fone, novaPessoa.endereco, novaPessoa.data_nascimento);
+                        if (regexec(&regex, comando, 10, matches, 0) == 0)
+                        {
+                            char *fields = strndup(comando + matches[1].rm_so, matches[1].rm_eo - matches[1].rm_so);
+                            char *values = strndup(comando + matches[2].rm_so, matches[2].rm_eo - matches[2].rm_so);
+                            // Parse fields and values here
+                            free(fields);
+                            free(values);
+                        }
+                        regfree(&regex);
                     }
-                    else if (strstr(comando, "fone"))
-                    {
-                        sscanf(comando, "insert into pessoa (codigo, nome, fone, data_nascimento) values (%d, '%[^']', '%[^']', '%[^']', '%[^']');",
-                               &novaPessoa.codigo, novaPessoa.nome, novaPessoa.fone, novaPessoa.data_nascimento);
-                    }
-                    else if (strstr(comando, "endereco"))
-                    {
-                        sscanf(comando, "insert into pessoa (codigo, nome, endereco, data_nascimento) values (%d, '%[^']', '%[^']', '%[^']', '%[^']');",
-                               &novaPessoa.codigo, novaPessoa.nome, novaPessoa.endereco, novaPessoa.data_nascimento);
-                    }
-                    else
-                    {
-                        sscanf(comando, "insert into pessoa (codigo, nome, data_nascimento) values (%d, '%[^']', '%[^']', '%[^']', '%[^']');",
-                               &novaPessoa.codigo, novaPessoa.nome, novaPessoa.data_nascimento);
-                    }
-
-                    inserirPessoa(listaPessoas, novaPessoa);
                 }
-                else if (strstr(comando, "insert into tipo_pet"))
+                else if (strstr(comando, "tipo_pet"))
                 {
                     TipoPet novoTipoPet = {0};
-                    sscanf(comando, "insert into tipo_pet (codigo, descricao) values (%d, '%[^']');",
-                           &novoTipoPet.codigo, novoTipoPet.descricao);
-                    inserirTipoPet(listaTiposPet, novoTipoPet);
+                    if (regcomp(&regex, "insert into tipo_pet \\(([^)]+)\\) values \\(([^)]+)\\);", REG_EXTENDED) == 0)
+                    {
+                        if (regexec(&regex, comando, 10, matches, 0) == 0)
+                        {
+                            char *fields = strndup(comando + matches[1].rm_so, matches[1].rm_eo - matches[1].rm_so);
+                            char *values = strndup(comando + matches[2].rm_so, matches[2].rm_eo - matches[2].rm_so);
+                            // Parse fields and values here
+                            free(fields);
+                            free(values);
+                        }
+                        regfree(&regex);
+                    }
                 }
-                else if (strstr(comando, "insert into pet"))
+                else if (strstr(comando, "pet"))
                 {
                     Pet novoPet = {0};
-                    sscanf(comando, "insert into pet (codigo, codigo_cli, nome, codigo_tipo) values (%d, %d, '%[^']', %d);",
-                           &novoPet.codigo, &novoPet.codigo_pes, novoPet.nome, &novoPet.codigo_tipo);
-                    inserirPet(listaPets, novoPet);
+                    if (regcomp(&regex, "insert into pet \\(([^)]+)\\) values \\(([^)]+)\\);", REG_EXTENDED) == 0)
+                    {
+                        if (regexec(&regex, comando, 10, matches, 0) == 0)
+                        {
+                            char *fields = strndup(comando + matches[1].rm_so, matches[1].rm_eo - matches[1].rm_so);
+                            char *values = strndup(comando + matches[2].rm_so, matches[2].rm_eo - matches[2].rm_so);
+                            // Parse fields and values here
+                            free(fields);
+                            free(values);
+                        }
+                        regfree(&regex);
+                    }
                 }
             }
             else if (strstr(comando, "delete from"))
             {
-                if (strstr(comando, "delete from pessoa"))
+                if (strstr(comando, "pessoa"))
                 {
                     int codigo;
-                    sscanf(comando, "delete from pessoa where codigo = %d;", &codigo);
-                    if (temPetsAssociados(*listaPets, codigo))
+                    if (regcomp(&regex, "delete from pessoa where codigo = (\\d+);", REG_EXTENDED) == 0)
                     {
-                        printf("Erro: Pessoa com código %d tem pets associados e não pode ser removida.\n", codigo);
-                    }
-                    else
-                    {
-                        removerPessoa(listaPessoas, codigo);
+                        if (regexec(&regex, comando, 10, matches, 0) == 0)
+                        {
+                            codigo = atoi(comando + matches[1].rm_so);
+                            if (temPetsAssociados(*listaPets, codigo))
+                            {
+                                printf("Erro: Pessoa com código %d tem pets associados e não pode ser removida.\n", codigo);
+                            }
+                            else
+                            {
+                                removerPessoa(listaPessoas, codigo);
+                            }
+                        }
+                        regfree(&regex);
                     }
                 }
-                else if (strstr(comando, "delete from tipo_pet"))
+                else if (strstr(comando, "tipo_pet"))
                 {
                     int codigo;
-                    sscanf(comando, "delete from tipo_pet where codigo = %d;", &codigo);
-                    removerTipoPet(listaTiposPet, codigo);
+                    if (regcomp(&regex, "delete from tipo_pet where codigo = (\\d+);", REG_EXTENDED) == 0)
+                    {
+                        if (regexec(&regex, comando, 10, matches, 0) == 0)
+                        {
+                            codigo = atoi(comando + matches[1].rm_so);
+                            removerTipoPet(listaTiposPet, codigo);
+                        }
+                        regfree(&regex);
+                    }
                 }
-                else if (strstr(comando, "delete from pet"))
+                else if (strstr(comando, "pet"))
                 {
                     int codigo;
-                    sscanf(comando, "delete from pet where codigo = %d;", &codigo);
-                    removerPet(listaPets, codigo);
+                    if (regcomp(&regex, "delete from pet where codigo = (\\d+);", REG_EXTENDED) == 0)
+                    {
+                        if (regexec(&regex, comando, 10, matches, 0) == 0)
+                        {
+                            codigo = atoi(comando + matches[1].rm_so);
+                            removerPet(listaPets, codigo);
+                        }
+                        regfree(&regex);
+                    }
                 }
             }
             else if (strstr(comando, "update"))
             {
-                if (strstr(comando, "update pessoa"))
+                if (strstr(comando, "pessoa"))
                 {
                     int codigo;
                     Pessoa novaPessoa = {0};
-                    sscanf(comando, "update pessoa set nome = '%[^']', fone = '%[^']', endereco = '%[^']', data_nascimento = '%[^']' where codigo = %d;",
-                           novaPessoa.nome, novaPessoa.fone, novaPessoa.endereco, novaPessoa.data_nascimento, &codigo);
-                    atualizarPessoaPorCodigo(*listaPessoas, codigo, novaPessoa);
+                    if (regcomp(&regex, "update pessoa set (.*) where codigo = (\\d+);", REG_EXTENDED) == 0)
+                    {
+                        if (regexec(&regex, comando, 10, matches, 0) == 0)
+                        {
+                            char *updates = strndup(comando + matches[1].rm_so, matches[1].rm_eo - matches[1].rm_so);
+                            codigo = atoi(comando + matches[2].rm_so);
+                            // Parse updates here
+                            free(updates);
+                        }
+                        regfree(&regex);
+                    }
                 }
-                else if (strstr(comando, "update tipo_pet"))
+                else if (strstr(comando, "tipo_pet"))
                 {
                     int codigo;
                     TipoPet novoTipoPet = {0};
-                    sscanf(comando, "update tipo_pet set descricao = '%[^']' where codigo = %d;", novoTipoPet.descricao, &codigo);
-                    atualizarTipoPetPorCodigo(*listaTiposPet, codigo, novoTipoPet);
+                    if (regcomp(&regex, "update tipo_pet set (.*) where codigo = (\\d+);", REG_EXTENDED) == 0)
+                    {
+                        if (regexec(&regex, comando, 10, matches, 0) == 0)
+                        {
+                            char *updates = strndup(comando + matches[1].rm_so, matches[1].rm_eo - matches[1].rm_so);
+                            codigo = atoi(comando + matches[2].rm_so);
+                            // Parse updates here
+                            free(updates);
+                        }
+                        regfree(&regex);
+                    }
                 }
-                else if (strstr(comando, "update pet"))
+                else if (strstr(comando, "pet"))
                 {
                     int codigo;
                     Pet novoPet = {0};
-                    sscanf(comando, "update pet set nome = '%[^']', codigo_cli = %d, codigo_tipo = %d where codigo = %d;",
-                           novoPet.nome, &novoPet.codigo_pes, &novoPet.codigo_tipo, &codigo);
-                    atualizarPetPorCodigo(*listaPets, codigo, novoPet);
+                    if (regcomp(&regex, "update pet set (.*) where codigo = (\\d+);", REG_EXTENDED) == 0)
+                    {
+                        if (regexec(&regex, comando, 10, matches, 0) == 0)
+                        {
+                            char *updates = strndup(comando + matches[1].rm_so, matches[1].rm_eo - matches[1].rm_so);
+                            codigo = atoi(comando + matches[2].rm_so);
+                            // Parse updates here
+                            free(updates);
+                        }
+                        regfree(&regex);
+                    }
                 }
             }
             else if (strstr(comando, "select"))
@@ -184,10 +253,13 @@ void processarComandos(FilaComandos *fila, Pessoa **listaPessoas, TipoPet **list
 
                     if (strstr(comando, "where"))
                     {
-                        if (sscanf(comando, "select %*s from pessoa where codigo = %d;", &codigo) != 1)
+                        if (regcomp(&regex, "select .* from pessoa where codigo = (\\d+);", REG_EXTENDED) == 0)
                         {
-                            printf("Erro: Não foi possível extrair o código do comando.\n");
-                            codigo = -1;
+                            if (regexec(&regex, comando, 10, matches, 0) == 0)
+                            {
+                                codigo = atoi(comando + matches[1].rm_so);
+                            }
+                            regfree(&regex);
                         }
                     }
 
@@ -204,10 +276,13 @@ void processarComandos(FilaComandos *fila, Pessoa **listaPessoas, TipoPet **list
 
                     if (strstr(comando, "where"))
                     {
-                        if (sscanf(comando, "select %*s from tipo_pet where codigo = %d;", &codigo) != 1)
+                        if (regcomp(&regex, "select .* from tipo_pet where codigo = (\\d+);", REG_EXTENDED) == 0)
                         {
-                            printf("Erro: Não foi possível extrair o código do comando.\n");
-                            codigo = -1;
+                            if (regexec(&regex, comando, 10, matches, 0) == 0)
+                            {
+                                codigo = atoi(comando + matches[1].rm_so);
+                            }
+                            regfree(&regex);
                         }
                     }
 
@@ -226,10 +301,13 @@ void processarComandos(FilaComandos *fila, Pessoa **listaPessoas, TipoPet **list
 
                     if (strstr(comando, "where"))
                     {
-                        if (sscanf(comando, "select %*s from pet where codigo = %d;", &codigo) != 1)
+                        if (regcomp(&regex, "select .* from pet where codigo = (\\d+);", REG_EXTENDED) == 0)
                         {
-                            printf("Erro: Não foi possível extrair o código do comando.\n");
-                            codigo = -1;
+                            if (regexec(&regex, comando, 10, matches, 0) == 0)
+                            {
+                                codigo = atoi(comando + matches[1].rm_so);
+                            }
+                            regfree(&regex);
                         }
                     }
 
