@@ -145,11 +145,41 @@ void removerPet(Pet **lista, int codigo)
     free(atual);
 }
 
-void listarPets(Pet *lista, bool listaOCodigo, bool listaOCodigoPessoa, bool listaONome, bool listaOCodigoTipo)
+void listarPets(Pet *lista, bool listaOCodigo, bool listaOCodigoPessoa, bool listaONome, bool listaOCodigoTipo, int codigo)
 {
     if (!lista)
     {
         printf("Nenhum pet cadastrado.\n");
+        return;
+    }
+
+    if (codigo >= 0)
+    {
+        Pet *atual = buscarPetPorCodigo(lista, codigo);
+
+        bool primeiroCampo = true;
+
+        if (listaOCodigo)
+        {
+            printf("Código: %d ", atual->codigo);
+            primeiroCampo = false;
+        }
+        if (listaOCodigoPessoa)
+        {
+            printf("%sCódigo Pessoa: %d", primeiroCampo ? "" : " | ", atual->codigo_pes);
+            primeiroCampo = false;
+        }
+        if (listaONome)
+        {
+            printf("%sNome: %s", primeiroCampo ? "" : " | ", atual->nome);
+            primeiroCampo = false;
+        }
+        if (listaOCodigoTipo)
+        {
+            printf("%Código Tipo: %d", primeiroCampo ? "" : " | ", atual->codigo_tipo);
+        }
+
+        printf("\n");
         return;
     }
 

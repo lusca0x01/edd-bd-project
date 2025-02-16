@@ -18,7 +18,7 @@ void atualizarTipoPetPorCodigo(TipoPet *lista, int codigo, TipoPet novoTipoPet);
 void atualizarTipoPetPorDescricao(TipoPet *lista, char descricao[50], TipoPet novoTipoPet);
 void inserirTipoPet(TipoPet **lista, TipoPet novoTipo);
 void removerTipoPet(TipoPet **lista, int codigo);
-void listarTiposPet(TipoPet *lista, bool listaOCodigo, bool listaADescricao);
+void listarTiposPet(TipoPet *lista, bool listaOCodigo, bool listaADescricao, int codigo);
 void liberarListaTiposPet(TipoPet **lista);
 
 #endif

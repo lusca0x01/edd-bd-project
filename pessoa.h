@@ -21,7 +21,7 @@ void atualizarPessoaPorCodigo(Pessoa *lista, int codigo, Pessoa novaPessoa);
 void atualizarPessoaPorNome(Pessoa *lista, char nome[50], Pessoa novaPessoa);
 void inserirPessoa(Pessoa **lista, Pessoa novaPessoa);
 void removerPessoa(Pessoa **lista, int codigo);
-void listarPessoas(Pessoa *lista, bool listaOCodigo, bool listaONome, bool listaOTelefone, bool listaOEndereco, bool listaONascimento);
+void listarPessoas(Pessoa *lista, bool listaOCodigo, bool listaONome, bool listaOTelefone, bool listaOEndereco, bool listaONascimento, int codigo);
 void liberarListaPessoas(Pessoa **lista);
 
 #endif

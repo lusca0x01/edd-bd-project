@@ -20,7 +20,7 @@ void atualizarPetPorCodigo(Pet *lista, int codigo, Pet novoPet);
 void atualizarPetPorNome(Pet *lista, char nome[50], Pet novoPet);
 void inserirPet(Pet **lista, Pet novoPet);
 void removerPet(Pet **lista, int codigo);
-void listarPets(Pet *lista, bool listaOCodigo, bool listaOCodigoPessoa, bool listaONome, bool listaOCodigoTipo);
+void listarPets(Pet *lista, bool listaOCodigo, bool listaOCodigoPessoa, bool listaONome, bool listaOCodigoTipo, int codigo);
 void liberarListaPets(Pet **lista);
 
 #endif

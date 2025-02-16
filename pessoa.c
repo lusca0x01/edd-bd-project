@@ -157,11 +157,46 @@ void removerPessoa(Pessoa **lista, int codigo)
     free(atual);
 }
 
-void listarPessoas(Pessoa *lista, bool listaOCodigo, bool listaONome, bool listaOTelefone, bool listaOEndereco, bool listaONascimento)
+void listarPessoas(Pessoa *lista, bool listaOCodigo, bool listaONome, bool listaOTelefone, bool listaOEndereco, bool listaONascimento, int codigo)
 {
     if (!lista)
     {
         printf("Nenhuma pessoa cadastrada.\n");
+        return;
+    }
+
+    if (codigo >= 0)
+    {
+        Pessoa *atual = buscarPessoaPorCodigo(lista, codigo);
+
+        bool primeiroCampo = true;
+
+        if (listaOCodigo)
+        {
+            printf("Código: %d", atual->codigo);
+            primeiroCampo = false;
+        }
+        if (listaONome)
+        {
+            printf("%sNome: %s", primeiroCampo ? "" : " | ", atual->nome);
+            primeiroCampo = false;
+        }
+        if (listaOTelefone)
+        {
+            printf("%sTelefone: %s", primeiroCampo ? "" : " | ", atual->fone);
+            primeiroCampo = false;
+        }
+        if (listaOEndereco)
+        {
+            printf("%sEndereço: %s", primeiroCampo ? "" : " | ", atual->endereco);
+            primeiroCampo = false;
+        }
+        if (listaONascimento)
+        {
+            printf("%sNascimento: %s", primeiroCampo ? "" : " | ", atual->data_nascimento);
+        }
+
+        printf("\n");
         return;
     }
 
