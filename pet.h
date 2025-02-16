@@ -13,6 +13,9 @@ typedef struct Pet
 Pet *carregarPets();
 void salvarPets(Pet *lista);
 Pet *buscarPetPorCodigo(Pet *lista, int codigo);
+Pet *buscarPetPorNome(Pet *lista, char nome[50]);
+void atualizarPetPorCodigo(Pet *lista, int codigo, Pet novoPet);
+void atualizarPetPorNome(Pet *lista, char nome[50], Pet novoPet);
 void inserirPet(Pet **lista, Pet novoPet);
 void removerPet(Pet **lista, int codigo);
 void listarPets(Pet *lista);

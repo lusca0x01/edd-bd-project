@@ -8,7 +8,6 @@
 
 int main()
 {
-    // Inicializa listas e filas
     Pessoa *listaPessoas = carregarPessoas();
     TipoPet *listaTiposPet = carregarTiposPet();
     Pet *listaPets = carregarPets();
@@ -16,7 +15,6 @@ int main()
     FilaComandos fila;
     inicializarFila(&fila);
 
-    // Lê comandos de um arquivo
     FILE *arquivo = fopen("script.sql", "r");
     if (arquivo)
     {
@@ -28,10 +26,8 @@ int main()
         fclose(arquivo);
     }
 
-    // Processa comandos
     processarComandos(&fila, &listaPessoas, &listaTiposPet, &listaPets);
 
-    // Salva alterações
     salvarPessoas(listaPessoas);
     salvarTiposPet(listaTiposPet);
     salvarPets(listaPets);

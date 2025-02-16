@@ -51,9 +51,50 @@ Pet *buscarPetPorCodigo(Pet *lista, int codigo)
     return NULL;
 }
 
-void inserirPet(Pet **lista, Pet novaPet)
+Pet *buscarPetPorNome(Pet *lista, char nome[50])
 {
-    if (buscarPetPorCodigo(*lista, novaPet.codigo))
+    while (lista)
+    {
+        if (strcmp(lista->nome, nome))
+        {
+            return lista;
+        }
+        lista = lista->prox;
+    }
+    return NULL;
+}
+
+void atualizarPetPorCodigo(Pet *lista, int codigo, Pet novoPet)
+{
+    Pet *pet = buscarPetPorCodigo(lista, codigo);
+
+    if (!pet)
+    {
+        printf("Pet não encontrada!\n");
+        return;
+    }
+
+    strncpy(pet->nome, novoPet.nome, sizeof(pet->nome) - 1);
+    pet->nome[sizeof(pet->nome) - 1] = '\0';
+}
+
+void atualizarPetPorNome(Pet *lista, char nome[50], Pet novoPet)
+{
+    Pet *pet = buscarPetPorNome(lista, nome);
+
+    if (!pet)
+    {
+        printf("Pet não encontrada!\n");
+        return;
+    }
+
+    strncpy(pet->nome, novoPet.nome, sizeof(pet->nome) - 1);
+    pet->nome[sizeof(pet->nome) - 1] = '\0';
+}
+
+void inserirPet(Pet **lista, Pet novoPet)
+{
+    if (buscarPetPorCodigo(*lista, novoPet.codigo))
     {
         printf("Erro: Código de Pet já existe!\n");
         return;
@@ -66,7 +107,7 @@ void inserirPet(Pet **lista, Pet novaPet)
         return;
     }
 
-    *novo = novaPet;
+    *novo = novoPet;
     novo->prox = *lista;
     novo->ant = NULL;
 

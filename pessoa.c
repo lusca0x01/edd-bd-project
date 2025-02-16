@@ -51,6 +51,59 @@ Pessoa *buscarPessoaPorCodigo(Pessoa *lista, int codigo)
     return NULL;
 }
 
+Pessoa *buscarPessoaPorNome(Pessoa *lista, char nome[50])
+{
+    while (lista)
+    {
+        if (strcmp(lista->nome, nome))
+        {
+            return lista;
+        }
+        lista = lista->prox;
+    }
+    return NULL;
+}
+
+void atualizarPessoaPorCodigo(Pessoa *lista, int codigo, Pessoa novaPessoa)
+{
+    Pessoa *pessoa = buscarPessoaPorCodigo(lista, codigo);
+
+    if (!pessoa)
+    {
+        printf("Pessoa não encontrada!\n");
+        return;
+    }
+
+    strncpy(pessoa->nome, novaPessoa.nome, sizeof(pessoa->nome) - 1);
+    pessoa->nome[sizeof(pessoa->nome) - 1] = '\0';
+    strncpy(pessoa->fone, novaPessoa.fone, sizeof(pessoa->fone) - 1);
+    pessoa->fone[sizeof(pessoa->fone) - 1] = '\0';
+    strncpy(pessoa->data_nascimento, novaPessoa.data_nascimento, sizeof(pessoa->data_nascimento) - 1);
+    pessoa->data_nascimento[sizeof(pessoa->data_nascimento) - 1] = '\0';
+    strncpy(pessoa->endereco, novaPessoa.endereco, sizeof(pessoa->endereco) - 1);
+    pessoa->endereco[sizeof(pessoa->endereco) - 1] = '\0';
+}
+
+void atualizarPessoaPorNome(Pessoa *lista, char nome[50], Pessoa novaPessoa)
+{
+    Pessoa *pessoa = buscarPessoaPorNome(lista, nome);
+
+    if (!pessoa)
+    {
+        printf("Pessoa não encontrada!\n");
+        return;
+    }
+
+    strncpy(pessoa->nome, novaPessoa.nome, sizeof(pessoa->nome) - 1);
+    pessoa->nome[sizeof(pessoa->nome) - 1] = '\0';
+    strncpy(pessoa->fone, novaPessoa.fone, sizeof(pessoa->fone) - 1);
+    pessoa->fone[sizeof(pessoa->fone) - 1] = '\0';
+    strncpy(pessoa->data_nascimento, novaPessoa.data_nascimento, sizeof(pessoa->data_nascimento) - 1);
+    pessoa->data_nascimento[sizeof(pessoa->data_nascimento) - 1] = '\0';
+    strncpy(pessoa->endereco, novaPessoa.endereco, sizeof(pessoa->endereco) - 1);
+    pessoa->endereco[sizeof(pessoa->endereco) - 1] = '\0';
+}
+
 void inserirPessoa(Pessoa **lista, Pessoa novaPessoa)
 {
     if (buscarPessoaPorCodigo(*lista, novaPessoa.codigo))

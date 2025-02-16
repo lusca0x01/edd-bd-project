@@ -11,6 +11,9 @@ typedef struct TipoPet
 TipoPet *carregarTiposPet();
 void salvarTiposPet(TipoPet *lista);
 TipoPet *buscarTipoPetPorCodigo(TipoPet *lista, int codigo);
+TipoPet *buscarTipoPetPorDescricao(TipoPet *lista, char descricao[50]);
+void atualizarTipoPetPorCodigo(TipoPet *lista, int codigo, TipoPet novoTipoPet);
+void atualizarTipoPetPorDescricao(TipoPet *lista, char descricao[50], TipoPet novoTipoPet);
 void inserirTipoPet(TipoPet **lista, TipoPet novoTipo);
 void removerTipoPet(TipoPet **lista, int codigo);
 void listarTiposPet(TipoPet *lista);

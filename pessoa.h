@@ -14,8 +14,12 @@ typedef struct Pessoa
 Pessoa *carregarPessoas();
 void salvarPessoas(Pessoa *lista);
 Pessoa *buscarPessoaPorCodigo(Pessoa *lista, int codigo);
+Pessoa *buscarPessoaPorNome(Pessoa *lista, char nome[50]);
+void atualizarPessoaPorCodigo(Pessoa *lista, int codigo, Pessoa novaPessoa);
+void atualizarPessoaPorNome(Pessoa *lista, char nome[50], Pessoa novaPessoa);
 void inserirPessoa(Pessoa **lista, Pessoa novaPessoa);
 void removerPessoa(Pessoa **lista, int codigo);
 void listarPessoas(Pessoa *lista);
+void liberarListaPessoas(Pessoa **lista);
 
 #endif

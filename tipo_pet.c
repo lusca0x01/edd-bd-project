@@ -51,6 +51,47 @@ TipoPet *buscarTipoPetPorCodigo(TipoPet *lista, int codigo)
     return NULL;
 }
 
+TipoPet *buscarTipoPetPorDescricao(TipoPet *lista, char descricao[50])
+{
+    while (lista)
+    {
+        if (strcmp(lista->descricao, descricao))
+        {
+            return lista;
+        }
+        lista = lista->prox;
+    }
+    return NULL;
+}
+
+void atualizarTipoPetPorCodigo(TipoPet *lista, int codigo, TipoPet novoTipoPet)
+{
+    TipoPet *tipo_pet = buscarTipoPetPorCodigo(lista, codigo);
+
+    if (!tipo_pet)
+    {
+        printf("Tipo Pet não encontrado!\n");
+        return;
+    }
+
+    strncpy(tipo_pet->descricao, novoTipoPet.descricao, sizeof(tipo_pet->descricao) - 1);
+    tipo_pet->descricao[sizeof(tipo_pet->descricao) - 1] = '\0';
+}
+
+void atualizarTipoPetPorDescricao(TipoPet *lista, char descricao[50], TipoPet novoTipoPet)
+{
+    TipoPet *tipo_pet = buscarTipoPetPorDescricao(lista, descricao);
+
+    if (!tipo_pet)
+    {
+        printf("Pet não encontrada!\n");
+        return;
+    }
+
+    strncpy(tipo_pet->descricao, novoTipoPet.descricao, sizeof(tipo_pet->descricao) - 1);
+    tipo_pet->descricao[sizeof(tipo_pet->descricao) - 1] = '\0';
+}
+
 void inserirTipoPet(TipoPet **lista, TipoPet novaTipoPet)
 {
     if (buscarTipoPetPorCodigo(*lista, novaTipoPet.codigo))
