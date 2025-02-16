@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <stdbool.h>
 #include "comando.h"
 #include "pessoa.h"
 #include "tipo_pet.h"
@@ -14,7 +15,13 @@ void inicializarFila(FilaComandos *fila)
 void adicionarComando(FilaComandos *fila, char *descricao)
 {
     Comando *novo = (Comando *)malloc(sizeof(Comando));
-    strcpy(novo->descricao, descricao);
+    if (!novo)
+    {
+        printf("Erro: Falha na alocação de memória para comando.\n");
+        return;
+    }
+    strncpy(novo->descricao, descricao, sizeof(novo->descricao) - 1);
+    novo->descricao[sizeof(novo->descricao) - 1] = '\0';
     novo->prox = NULL;
 
     if (fila->fim)
@@ -28,7 +35,10 @@ void adicionarComando(FilaComandos *fila, char *descricao)
 char *removerComando(FilaComandos *fila)
 {
     if (!fila->inicio)
+    {
+        printf("Erro: Tentativa de remover comando de uma fila vazia.\n");
         return NULL;
+    }
 
     Comando *temp = fila->inicio;
     char *descricao = strdup(temp->descricao);
@@ -44,23 +54,21 @@ char *removerComando(FilaComandos *fila)
 int validarComando(char *comando)
 {
     return (
-        strstr(comando, "insert into") ||
-        strstr(comando, "update") ||
-        strstr(comando, "delete from") ||
-        strstr(comando, "select * from"));
+        strncmp(comando, "insert into", 11) == 0 ||
+        strncmp(comando, "update", 6) == 0 ||
+        strncmp(comando, "delete from", 11) == 0 ||
+        strncmp(comando, "select * from", 13) == 0);
 }
 
 int temPetsAssociados(Pet *lista, int codigoPessoa)
 {
-    while (lista)
+    for (Pet *atual = lista; atual; atual = atual->prox)
     {
-        if (lista->codigo_pes == codigoPessoa)
+        if (atual->codigo_pes == codigoPessoa)
             return 1;
-        lista = lista->prox;
     }
     return 0;
 }
-
 void processarComandos(FilaComandos *fila, Pessoa **listaPessoas, TipoPet **listaTiposPet, Pet **listaPets)
 {
     char *comando;
@@ -71,31 +79,9 @@ void processarComandos(FilaComandos *fila, Pessoa **listaPessoas, TipoPet **list
             // INSERT INTO PESSOA
             if (strstr(comando, "insert into pessoa"))
             {
-                Pessoa novaPessoa;
-                novaPessoa.endereco[0] = '\0';
-                novaPessoa.data_nascimento[0] = '\0';
-
-                if ((strstr(comando, "endereco, data_nascimento")))
-                {
-                    sscanf(comando, "insert into pessoa (codigo, nome, fone, endereco, data_nascimento) values (%d, '%[^']', '%[^']', '%[^']', '%[^']');",
-                           &novaPessoa.codigo, novaPessoa.nome, novaPessoa.fone, novaPessoa.endereco);
-                }
-                if (strstr(comando, "endereco"))
-                {
-                    sscanf(comando, "insert into pessoa (codigo, nome, fone, endereco) values (%d, '%[^']', '%[^']', '%[^']');",
-                           &novaPessoa.codigo, novaPessoa.nome, novaPessoa.fone, novaPessoa.endereco);
-                }
-                else if (strstr(comando, "data_nascimento"))
-                {
-                    sscanf(comando, "insert into pessoa (codigo, nome, fone, data_nascimento) values (%d, '%[^']', '%[^']', '%[^']');",
-                           &novaPessoa.codigo, novaPessoa.nome, novaPessoa.fone, novaPessoa.data_nascimento);
-                }
-                else
-                {
-                    sscanf(comando, "insert into pessoa (codigo, nome, fone) values (%d, '%[^']', '%[^']');",
-                           &novaPessoa.codigo, novaPessoa.nome, novaPessoa.fone);
-                }
-
+                Pessoa novaPessoa = {0};
+                sscanf(comando, "insert into pessoa (codigo, nome, fone, endereco, data_nascimento) values (%d, '%[^']', '%[^']', '%[^']', '%[^']');",
+                       &novaPessoa.codigo, novaPessoa.nome, novaPessoa.fone, novaPessoa.endereco, novaPessoa.data_nascimento);
                 inserirPessoa(listaPessoas, novaPessoa);
             }
             // INSERT INTO TIPO_PET
@@ -122,9 +108,11 @@ void processarComandos(FilaComandos *fila, Pessoa **listaPessoas, TipoPet **list
                 if (temPetsAssociados(*listaPets, codigo))
                 {
                     printf("Erro: Pessoa com código %d tem pets associados e não pode ser removida.\n", codigo);
-                    continue;
                 }
-                removerPessoa(listaPessoas, codigo);
+                else
+                {
+                    removerPessoa(listaPessoas, codigo);
+                }
             }
             // DELETE FROM TIPO_PET
             else if (strstr(comando, "delete from tipo_pet"))
@@ -140,20 +128,70 @@ void processarComandos(FilaComandos *fila, Pessoa **listaPessoas, TipoPet **list
                 sscanf(comando, "delete from pet where codigo = %d;", &codigo);
                 removerPet(listaPets, codigo);
             }
-            // SELECT * FROM PESSOA
-            else if (strstr(comando, "select * from pessoa"))
+            // UPDATE PESSOA
+            else if (strstr(comando, "update pessoa"))
             {
-                listarPessoas(*listaPessoas);
+                int codigo;
+                Pessoa novaPessoa = {0};
+                sscanf(comando, "update pessoa set nome = '%[^']', fone = '%[^']', endereco = '%[^']', data_nascimento = '%[^']' where codigo = %d;",
+                       novaPessoa.nome, novaPessoa.fone, novaPessoa.endereco, novaPessoa.data_nascimento, &codigo);
+                atualizarPessoaPorCodigo(*listaPessoas, codigo, novaPessoa);
             }
-            // SELECT * FROM TIPO_PET
-            else if (strstr(comando, "select * from tipo_pet"))
+            // UPDATE TIPO_PET
+            else if (strstr(comando, "update tipo_pet"))
             {
-                listarTiposPet(*listaTiposPet);
+                int codigo;
+                TipoPet novoTipoPet = {0};
+                sscanf(comando, "update tipo_pet set descricao = '%[^']' where codigo = %d;",
+                       novoTipoPet.descricao, &codigo);
+                atualizarTipoPetPorCodigo(*listaTiposPet, codigo, novoTipoPet);
             }
-            // SELECT * FROM PET
-            else if (strstr(comando, "select * from pet"))
+            // UPDATE PET
+            else if (strstr(comando, "update pet"))
             {
-                listarPets(*listaPets);
+                int codigo;
+                Pet novoPet = {0};
+                sscanf(comando, "update pet set nome = '%[^']', codigo_cli = %d, codigo_tipo = %d where codigo = %d;",
+                       novoPet.nome, &novoPet.codigo_pes, &novoPet.codigo_tipo, &codigo);
+                atualizarPetPorCodigo(*listaPets, codigo, novoPet);
+            }
+            // SELECT FROM PESSOA
+            else if (strstr(comando, "select") && strstr(comando, "from pessoa"))
+            {
+                bool listaOCodigo = strstr(comando, "codigo") != NULL;
+                bool listaONome = strstr(comando, "nome") != NULL;
+                bool listaOTelefone = strstr(comando, "fone") != NULL;
+                bool listaOEndereco = strstr(comando, "endereco") != NULL;
+                bool listaONascimento = strstr(comando, "data_nascimento") != NULL;
+
+                if (strstr(comando, "*"))
+                    listarPessoas(*listaPessoas, true, true, true, true, true);
+                else
+                    listarPessoas(*listaPessoas, listaOCodigo, listaONome, listaOTelefone, listaOEndereco, listaONascimento);
+            }
+            // SELECT FROM TIPO_PET
+            else if (strstr(comando, "select") && strstr(comando, "from tipo_pet"))
+            {
+                bool listaOCodigo = strstr(comando, "codigo") != NULL;
+                bool listaADescricao = strstr(comando, "descricao") != NULL;
+
+                if (strstr(comando, "*"))
+                    listarTiposPet(*listaTiposPet, true, true);
+                else
+                    listarTiposPet(*listaTiposPet, listaOCodigo, listaADescricao);
+            }
+            // SELECT FROM PET
+            else if (strstr(comando, "select") && strstr(comando, "from pet"))
+            {
+                bool listaOCodigo = strstr(comando, "codigo") != NULL;
+                bool listaOCodigoPessoa = strstr(comando, "codigo_pessoa") != NULL;
+                bool listaONome = strstr(comando, "nome") != NULL;
+                bool listaOCodigoTipo = strstr(comando, "codigo_tipo") != NULL;
+
+                if (strstr(comando, "*"))
+                    listarPets(*listaPets, true, true, true, true);
+                else
+                    listarPets(*listaPets, listaOCodigo, listaOCodigoPessoa, listaONome, listaOCodigoTipo);
             }
             else
             {

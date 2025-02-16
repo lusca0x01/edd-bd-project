@@ -1,6 +1,8 @@
 #ifndef TIPO_PET_H
 #define TIPO_PET_H
 
+#include <stdbool.h>
+
 typedef struct TipoPet
 {
     int codigo;
@@ -16,6 +18,7 @@ void atualizarTipoPetPorCodigo(TipoPet *lista, int codigo, TipoPet novoTipoPet);
 void atualizarTipoPetPorDescricao(TipoPet *lista, char descricao[50], TipoPet novoTipoPet);
 void inserirTipoPet(TipoPet **lista, TipoPet novoTipo);
 void removerTipoPet(TipoPet **lista, int codigo);
-void listarTiposPet(TipoPet *lista);
+void listarTiposPet(TipoPet *lista, bool listaOCodigo, bool listaADescricao);
+void liberarListaTiposPet(TipoPet **lista);
 
 #endif

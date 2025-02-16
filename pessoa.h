@@ -1,6 +1,8 @@
 #ifndef PESSOA_H
 #define PESSOA_H
 
+#include <stdbool.h>
+
 typedef struct Pessoa
 {
     int codigo;
@@ -19,7 +21,7 @@ void atualizarPessoaPorCodigo(Pessoa *lista, int codigo, Pessoa novaPessoa);
 void atualizarPessoaPorNome(Pessoa *lista, char nome[50], Pessoa novaPessoa);
 void inserirPessoa(Pessoa **lista, Pessoa novaPessoa);
 void removerPessoa(Pessoa **lista, int codigo);
-void listarPessoas(Pessoa *lista);
+void listarPessoas(Pessoa *lista, bool listaOCodigo, bool listaONome, bool listaOTelefone, bool listaOEndereco, bool listaONascimento);
 void liberarListaPessoas(Pessoa **lista);
 
 #endif

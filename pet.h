@@ -1,6 +1,8 @@
 #ifndef PET_H
 #define PET_H
 
+#include <stdbool.h>
+
 typedef struct Pet
 {
     int codigo;
@@ -18,6 +20,7 @@ void atualizarPetPorCodigo(Pet *lista, int codigo, Pet novoPet);
 void atualizarPetPorNome(Pet *lista, char nome[50], Pet novoPet);
 void inserirPet(Pet **lista, Pet novoPet);
 void removerPet(Pet **lista, int codigo);
-void listarPets(Pet *lista);
+void listarPets(Pet *lista, bool listaOCodigo, bool listaOCodigoPessoa, bool listaONome, bool listaOCodigoTipo);
+void liberarListaPets(Pet **lista);
 
 #endif

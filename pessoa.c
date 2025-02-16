@@ -157,12 +157,44 @@ void removerPessoa(Pessoa **lista, int codigo)
     free(atual);
 }
 
-void listarPessoas(Pessoa *lista)
+void listarPessoas(Pessoa *lista, bool listaOCodigo, bool listaONome, bool listaOTelefone, bool listaOEndereco, bool listaONascimento)
 {
+    if (!lista)
+    {
+        printf("Nenhuma pessoa cadastrada.\n");
+        return;
+    }
+
     while (lista)
     {
-        printf("Código: %d | Nome: %s | Telefone: %s | Endereço: %s | Nascimento: %s\n",
-               lista->codigo, lista->nome, lista->fone, lista->endereco, lista->data_nascimento);
+        bool primeiroCampo = true;
+
+        if (listaOCodigo)
+        {
+            printf("Código: %d", lista->codigo);
+            primeiroCampo = false;
+        }
+        if (listaONome)
+        {
+            printf("%sNome: %s", primeiroCampo ? "" : " | ", lista->nome);
+            primeiroCampo = false;
+        }
+        if (listaOTelefone)
+        {
+            printf("%sTelefone: %s", primeiroCampo ? "" : " | ", lista->fone);
+            primeiroCampo = false;
+        }
+        if (listaOEndereco)
+        {
+            printf("%sEndereço: %s", primeiroCampo ? "" : " | ", lista->endereco);
+            primeiroCampo = false;
+        }
+        if (listaONascimento)
+        {
+            printf("%sNascimento: %s", primeiroCampo ? "" : " | ", lista->data_nascimento);
+        }
+
+        printf("\n");
         lista = lista->prox;
     }
 }
