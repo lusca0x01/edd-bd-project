@@ -1,6 +1,7 @@
 #include "pet.h"
 #include <string.h>
 #include <stdio.h>
+#include <stdlib.h>
 
 #define ARQUIVO_PET "pet.dat"
 
@@ -161,7 +162,7 @@ void listarPets(Pet *lista, bool listaOCodigo, bool listaOCodigoPessoa, bool lis
 
         if (listaOCodigo)
         {
-            printf("Código: %d ", atual->codigo);
+            printf("Código: %d", atual->codigo);
             primeiroCampo = false;
         }
         if (listaOCodigoPessoa)
@@ -176,7 +177,7 @@ void listarPets(Pet *lista, bool listaOCodigo, bool listaOCodigoPessoa, bool lis
         }
         if (listaOCodigoTipo)
         {
-            printf("%Código Tipo: %d", primeiroCampo ? "" : " | ", atual->codigo_tipo);
+            printf("%sCódigo Tipo: %d", primeiroCampo ? "" : " | ", atual->codigo_tipo);
         }
 
         printf("\n");
@@ -189,7 +190,7 @@ void listarPets(Pet *lista, bool listaOCodigo, bool listaOCodigoPessoa, bool lis
 
         if (listaOCodigo)
         {
-            printf("Código: %d ", lista->codigo);
+            printf("Código: %d", lista->codigo);
             primeiroCampo = false;
         }
         if (listaOCodigoPessoa)
@@ -204,7 +205,7 @@ void listarPets(Pet *lista, bool listaOCodigo, bool listaOCodigoPessoa, bool lis
         }
         if (listaOCodigoTipo)
         {
-            printf("%Código Tipo: %d", primeiroCampo ? "" : " | ", lista->codigo_tipo);
+            printf("%sCódigo Tipo: %d", primeiroCampo ? "" : " | ", lista->codigo_tipo);
         }
 
         printf("\n");

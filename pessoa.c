@@ -1,6 +1,7 @@
 #include "pessoa.h"
 #include <string.h>
 #include <stdio.h>
+#include <stdlib.h>
 
 #define ARQUIVO_PESSOAS "pessoas.dat"
 

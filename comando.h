@@ -1,6 +1,10 @@
 #ifndef COMANDO_H
 #define COMANDO_H
 
+#include "pessoa.h"
+#include "pet.h"
+#include "tipo_pet.h"
+
 typedef struct Comando
 {
     char descricao[256];

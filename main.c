@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <locale.h>
 #include "pessoa.h"
 #include "tipo_pet.h"
 #include "pet.h"
@@ -8,6 +9,8 @@
 
 int main()
 {
+    setlocale(LC_ALL, "pt_BR.UTF-8");
+
     Pessoa *listaPessoas = carregarPessoas();
     TipoPet *listaTiposPet = carregarTiposPet();
     Pet *listaPets = carregarPets();
@@ -27,6 +30,12 @@ int main()
     }
 
     processarComandos(&fila, &listaPessoas, &listaTiposPet, &listaPets);
+
+    printf("PRINTS DA LISTAGEM ////////////// (TESTE)\n");
+    listarPessoas(listaPessoas, true, true, true, true, true, -1);
+    listarPets(listaPets, true, true, true, true, -1);
+    listarTiposPet(listaTiposPet, true, true, -1);
+    printf("//////////////");
 
     salvarPessoas(listaPessoas);
     salvarTiposPet(listaTiposPet);

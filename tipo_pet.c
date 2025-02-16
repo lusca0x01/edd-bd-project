@@ -1,10 +1,11 @@
 #include "tipo_pet.h"
 #include <string.h>
 #include <stdio.h>
+#include <stdlib.h>
 
 #define ARQUIVO_TipoPet "tipopet.dat"
 
-TipoPet *carregarTipoPets()
+TipoPet *carregarTiposPet()
 {
     FILE *file = fopen(ARQUIVO_TipoPet, "rb");
     if (!file)
@@ -22,7 +23,7 @@ TipoPet *carregarTipoPets()
     return lista;
 }
 
-void salvarTipoPets(TipoPet *lista)
+void salvarTiposPet(TipoPet *lista)
 {
     FILE *file = fopen(ARQUIVO_TipoPet, "wb");
     if (!file)

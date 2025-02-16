@@ -3,9 +3,6 @@
 #include <string.h>
 #include <stdbool.h>
 #include "comando.h"
-#include "pessoa.h"
-#include "tipo_pet.h"
-#include "pet.h"
 
 void inicializarFila(FilaComandos *fila)
 {
@@ -82,8 +79,27 @@ void processarComandos(FilaComandos *fila, Pessoa **listaPessoas, TipoPet **list
                 if (strstr(comando, "insert into pessoa"))
                 {
                     Pessoa novaPessoa = {0};
-                    sscanf(comando, "insert into pessoa (codigo, nome, fone, endereco, data_nascimento) values (%d, '%[^']', '%[^']', '%[^']', '%[^']');",
-                           &novaPessoa.codigo, novaPessoa.nome, novaPessoa.fone, novaPessoa.endereco, novaPessoa.data_nascimento);
+                    if (strstr(comando, "fone") && strstr(comando, "endereco"))
+                    {
+                        sscanf(comando, "insert into pessoa (codigo, nome, fone, endereco, data_nascimento) values (%d, '%[^']', '%[^']', '%[^']', '%[^']');",
+                               &novaPessoa.codigo, novaPessoa.nome, novaPessoa.fone, novaPessoa.endereco, novaPessoa.data_nascimento);
+                    }
+                    else if (strstr(comando, "fone"))
+                    {
+                        sscanf(comando, "insert into pessoa (codigo, nome, fone, data_nascimento) values (%d, '%[^']', '%[^']', '%[^']', '%[^']');",
+                               &novaPessoa.codigo, novaPessoa.nome, novaPessoa.fone, novaPessoa.data_nascimento);
+                    }
+                    else if (strstr(comando, "endereco"))
+                    {
+                        sscanf(comando, "insert into pessoa (codigo, nome, endereco, data_nascimento) values (%d, '%[^']', '%[^']', '%[^']', '%[^']');",
+                               &novaPessoa.codigo, novaPessoa.nome, novaPessoa.endereco, novaPessoa.data_nascimento);
+                    }
+                    else
+                    {
+                        sscanf(comando, "insert into pessoa (codigo, nome, data_nascimento) values (%d, '%[^']', '%[^']', '%[^']', '%[^']');",
+                               &novaPessoa.codigo, novaPessoa.nome, novaPessoa.data_nascimento);
+                    }
+
                     inserirPessoa(listaPessoas, novaPessoa);
                 }
                 else if (strstr(comando, "insert into tipo_pet"))
