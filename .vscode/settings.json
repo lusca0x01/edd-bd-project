@@ -1,0 +1,7 @@
+{
+    "files.associations": {
+        "pessoa.h": "c",
+        "string.h": "c",
+        "tipo_pet.h": "c"
+    }
+}
