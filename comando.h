@@ -21,4 +21,5 @@ void adicionarComando(FilaComandos *fila, char *descricao);
 char *removerComando(FilaComandos *fila);
 int validarComando(char *comando);
 void processarComandos(FilaComandos *fila, Pessoa **listaPessoas, TipoPet **listaTiposPet, Pet **listaPets);
+int temOrderBy(char *comando, char *colunaOrdenacao);
 #endif

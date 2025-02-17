@@ -3,6 +3,9 @@
 #include <string.h>
 #include <stdbool.h>
 #include "comando.h"
+#include "arvore_pessoa.h"
+#include "pessoa.h"
+
 
 void inicializarFila(FilaComandos *fila)
 {
@@ -193,8 +196,12 @@ void processarComandos(FilaComandos *fila, Pessoa **listaPessoas, TipoPet **list
                         }
                     }
                     //implementar order by
-                    if (strstr(comando, "*"))
-                        listarPessoas(*listaPessoas, true, true, true, true, true, codigo);
+                    if (strstr(comando, "*")){
+                        if (possuiOrderBy)
+                            listarPessoasOrderBy(*listaPessoas, colunaOrdenacao, true, true, true, true, true);
+                        else
+                            listarPessoas(*listaPessoas, true, true, true, true, true, codigo);
+                    }
                     else
                         listarPessoas(*listaPessoas, listaOCodigo, listaONome, listaOTelefone, listaOEndereco, listaONascimento, codigo);
                 }
@@ -213,8 +220,9 @@ void processarComandos(FilaComandos *fila, Pessoa **listaPessoas, TipoPet **list
                         }
                     }
                     //implementar order by
-                    if (strstr(comando, "*"))
+                    if (strstr(comando, "*")){
                         listarTiposPet(*listaTiposPet, true, true, codigo);
+                    }
                     else
                         listarTiposPet(*listaTiposPet, listaOCodigo, listaADescricao, codigo);
                 }

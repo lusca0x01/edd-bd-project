@@ -31,12 +31,6 @@ int main()
 
     processarComandos(&fila, &listaPessoas, &listaTiposPet, &listaPets);
 
-    printf("PRINTS DA LISTAGEM ////////////// (TESTE)\n");
-    listarPessoas(listaPessoas, true, true, true, true, true, -1);
-    listarPets(listaPets, true, true, true, true, -1);
-    listarTiposPet(listaTiposPet, true, true, -1);
-    printf("//////////////");
-
     salvarPessoas(listaPessoas);
     salvarTiposPet(listaTiposPet);
     salvarPets(listaPets);
