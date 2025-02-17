@@ -4,99 +4,123 @@
 #include "pessoa.h"
 #include "arvore_pessoa.h"
 
-int compararPessoas(Pessoa *p1, Pessoa *p2, const char *coluna) {
-    if (strcmp(coluna, "codigo") == 0) {
-        return (p1->codigo > p2->codigo) - (p1->codigo < p2->codigo); // Retorna -1, 0 ou 1
-    } else if (strcmp(coluna, "nome") == 0) {
+int compararPessoas(Pessoa *p1, Pessoa *p2, const char *coluna)
+{
+    if (strstr(coluna, "codigo") == 0)
+    {
+        return (p1->codigo > p2->codigo) - (p1->codigo < p2->codigo);
+    }
+    else if (strstr(coluna, "nome") == 0)
+    {
         return strcmp(p1->nome, p2->nome);
-    } else if (strcmp(coluna, "fone") == 0) {
+    }
+    else if (strstr(coluna, "fone") == 0)
+    {
         return strcmp(p1->fone, p2->fone);
-    } else if (strcmp(coluna, "data_nascimento") == 0) {
+    }
+    else if (strstr(coluna, "data_nascimento") == 0)
+    {
         return strcmp(p1->data_nascimento, p2->data_nascimento);
-    } else if (strcmp(coluna, "endereco") == 0) {
+    }
+    else if (strstr(coluna, "endereco") == 0)
+    {
         return strcmp(p1->endereco, p2->endereco);
     }
     return 0;
 }
 
-
-ArvorePessoa* inserirNaArvore(ArvorePessoa *raiz, Pessoa *pessoa, const char *coluna) {
-    if (raiz == NULL) {
-        ArvorePessoa *novoNo = (ArvorePessoa*)malloc(sizeof(ArvorePessoa));
+ArvorePessoa *inserirNaArvore(ArvorePessoa *raiz, Pessoa *pessoa, const char *coluna)
+{
+    if (raiz == NULL)
+    {
+        ArvorePessoa *novoNo = (ArvorePessoa *)malloc(sizeof(ArvorePessoa));
         novoNo->pessoa = pessoa;
         novoNo->esq = novoNo->dir = NULL;
         return novoNo;
     }
 
-    if (compararPessoas(pessoa, raiz->pessoa, coluna) < 0) {
+    if (compararPessoas(pessoa, raiz->pessoa, coluna) < 0)
+    {
         raiz->esq = inserirNaArvore(raiz->esq, pessoa, coluna);
-    } else {
+    }
+    else
+    {
         raiz->dir = inserirNaArvore(raiz->dir, pessoa, coluna);
     }
 
     return raiz;
 }
 
-void imprimirPessoa(Pessoa *pessoa, bool listaOCodigo, bool listaONome, bool listaOTelefone, bool listaOEndereco, bool listaONascimento) {
+void imprimirPessoa(Pessoa *pessoa, bool listaOCodigo, bool listaONome, bool listaOTelefone, bool listaOEndereco, bool listaONascimento)
+{
     bool primeiroCampo = true;
 
-    if (listaOCodigo) {
+    if (listaOCodigo)
+    {
         printf("Código: %d", pessoa->codigo);
         primeiroCampo = false;
     }
-    if (listaONome) {
+    if (listaONome)
+    {
         printf("%sNome: %s", primeiroCampo ? "" : " | ", pessoa->nome);
         primeiroCampo = false;
     }
-    if (listaOTelefone) {
+    if (listaOTelefone)
+    {
         printf("%sTelefone: %s", primeiroCampo ? "" : " | ", pessoa->fone);
         primeiroCampo = false;
     }
-    if (listaOEndereco) {
+    if (listaOEndereco)
+    {
         printf("%sEndereço: %s", primeiroCampo ? "" : " | ", pessoa->endereco);
         primeiroCampo = false;
     }
-    if (listaONascimento) {
+    if (listaONascimento)
+    {
         printf("%sNascimento: %s", primeiroCampo ? "" : " | ", pessoa->data_nascimento);
     }
 
     printf("\n");
 }
 
-void percorrerEmOrdem(ArvorePessoa *raiz, const char *coluna, bool listaOCodigo, bool listaONome, bool listaOTelefone, bool listaOEndereco, bool listaONascimento) {
-    if (raiz == NULL) return;
+void percorrerEmOrdem(ArvorePessoa *raiz, const char *coluna, bool listaOCodigo, bool listaONome, bool listaOTelefone, bool listaOEndereco, bool listaONascimento)
+{
+    if (raiz == NULL)
+        return;
 
-    percorrerEmOrdem(raiz->esq, coluna,  listaOCodigo,  listaONome,  listaOTelefone,  listaOEndereco,  listaONascimento);
-    imprimirPessoa(raiz->pessoa,  listaOCodigo,  listaONome,  listaOTelefone,  listaOEndereco,  listaONascimento);
-    percorrerEmOrdem(raiz->dir, coluna,  listaOCodigo,  listaONome,  listaOTelefone,  listaOEndereco,  listaONascimento);
+    percorrerEmOrdem(raiz->esq, coluna, listaOCodigo, listaONome, listaOTelefone, listaOEndereco, listaONascimento);
+    imprimirPessoa(raiz->pessoa, listaOCodigo, listaONome, listaOTelefone, listaOEndereco, listaONascimento);
+    percorrerEmOrdem(raiz->dir, coluna, listaOCodigo, listaONome, listaOTelefone, listaOEndereco, listaONascimento);
 }
 
-void liberarArvore(ArvorePessoa **raiz) {
-    if (*raiz == NULL) return;
+void liberarArvore(ArvorePessoa **raiz)
+{
+    if (*raiz == NULL)
+        return;
 
-    liberarArvore(&(*raiz)->esq); 
-    liberarArvore(&(*raiz)->dir);  
+    liberarArvore(&(*raiz)->esq);
+    liberarArvore(&(*raiz)->dir);
 
-    free(*raiz);  
-    *raiz = NULL;  
+    free(*raiz);
+    *raiz = NULL;
 }
 
-
-void listarPessoasOrderBy(Pessoa *raiz, const char *coluna, bool listaOCodigo, bool listaONome, bool listaOTelefone, bool listaOEndereco, bool listaONascimento) {
-    if (!raiz) {
+void listarPessoasOrderBy(Pessoa *raiz, const char *coluna, bool listaOCodigo, bool listaONome, bool listaOTelefone, bool listaOEndereco, bool listaONascimento)
+{
+    if (!raiz)
+    {
         printf("Nenhuma pessoa cadastrada.\n");
         return;
     }
     ArvorePessoa *arvore = NULL;
     Pessoa *atual = raiz;
 
-
-    while (atual) {
+    while (atual)
+    {
         arvore = inserirNaArvore(arvore, atual, coluna);
-        atual = atual->prox;  
+        atual = atual->prox;
     }
 
-    percorrerEmOrdem(arvore, coluna,  listaOCodigo,  listaONome,  listaOTelefone,  listaOEndereco,  listaONascimento);
+    percorrerEmOrdem(arvore, coluna, listaOCodigo, listaONome, listaOTelefone, listaOEndereco, listaONascimento);
     liberarArvore(&arvore);
 }
-
