@@ -3,6 +3,7 @@
         "pessoa.h": "c",
         "string.h": "c",
         "tipo_pet.h": "c",
-        "stdbool.h": "c"
+        "stdbool.h": "c",
+        "cwchar": "cpp"
     }
 }

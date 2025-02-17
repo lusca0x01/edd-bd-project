@@ -6,23 +6,23 @@
 
 int compararPessoas(Pessoa *p1, Pessoa *p2, const char *coluna)
 {
-    if (strstr(coluna, "codigo") == 0)
+    if (strcmp(coluna, "codigo;") == 0)
     {
         return (p1->codigo > p2->codigo) - (p1->codigo < p2->codigo);
     }
-    else if (strstr(coluna, "nome") == 0)
+    else if (strcmp(coluna, "nome;") == 0)
     {
         return strcmp(p1->nome, p2->nome);
     }
-    else if (strstr(coluna, "fone") == 0)
+    else if (strcmp(coluna, "fone;") == 0)
     {
         return strcmp(p1->fone, p2->fone);
     }
-    else if (strstr(coluna, "data_nascimento") == 0)
+    else if (strcmp(coluna, "data_nascimento;") == 0)
     {
         return strcmp(p1->data_nascimento, p2->data_nascimento);
     }
-    else if (strstr(coluna, "endereco") == 0)
+    else if (strcmp(coluna, "endereco;") == 0)
     {
         return strcmp(p1->endereco, p2->endereco);
     }
