@@ -25,7 +25,7 @@ int compararPets(Pet *p1, Pet *p2, const char *coluna)
     return 0;
 }
 
-ArvorePet *inserirNaArvore(ArvorePet *raiz, Pet *pet, const char *coluna)
+ArvorePet *inserirNaArvorePet(ArvorePet *raiz, Pet *pet, const char *coluna)
 {
     if (raiz == NULL)
     {
@@ -37,11 +37,11 @@ ArvorePet *inserirNaArvore(ArvorePet *raiz, Pet *pet, const char *coluna)
 
     if (compararPets(pet, raiz->pet, coluna) < 0)
     {
-        raiz->esq = inserirNaArvore(raiz->esq, pet, coluna);
+        raiz->esq = inserirNaArvorePet(raiz->esq, pet, coluna);
     }
     else
     {
-        raiz->dir = inserirNaArvore(raiz->dir, pet, coluna);
+        raiz->dir = inserirNaArvorePet(raiz->dir, pet, coluna);
     }
 
     return raiz;
@@ -74,23 +74,23 @@ void imprimirPet(Pet *pet, bool listaOCodigo, bool listaOCodigoPessoa, bool list
     printf("\n");
 }
 
-void percorrerEmOrdem(ArvorePet *raiz, const char *coluna, bool listaOCodigo, bool listaOCodigoPessoa, bool listaONome, bool listaOCodigoTipo)
+void percorrerEmOrdemPet(ArvorePet *raiz, const char *coluna, bool listaOCodigo, bool listaOCodigoPessoa, bool listaONome, bool listaOCodigoTipo)
 {
     if (raiz == NULL)
         return;
 
-    percorrerEmOrdem(raiz->esq, coluna, listaOCodigo, listaOCodigoPessoa, listaONome, listaOCodigoTipo);
+    percorrerEmOrdemPet(raiz->esq, coluna, listaOCodigo, listaOCodigoPessoa, listaONome, listaOCodigoTipo);
     imprimirPet(raiz->pet, listaOCodigo, listaOCodigoPessoa, listaONome, listaOCodigoTipo);
-    percorrerEmOrdem(raiz->dir, coluna, listaOCodigo, listaOCodigoPessoa, listaONome, listaOCodigoTipo);
+    percorrerEmOrdemPet(raiz->dir, coluna, listaOCodigo, listaOCodigoPessoa, listaONome, listaOCodigoTipo);
 }
 
-void liberarArvore(ArvorePet **raiz)
+void liberarArvorePet(ArvorePet **raiz)
 {
     if (*raiz == NULL)
         return;
 
-    liberarArvore(&(*raiz)->esq);
-    liberarArvore(&(*raiz)->dir);
+    liberarArvorePet(&(*raiz)->esq);
+    liberarArvorePet(&(*raiz)->dir);
 
     free(*raiz);
     *raiz = NULL;
@@ -108,10 +108,10 @@ void listarPetsOrderBy(Pet *raiz, const char *coluna, bool listaOCodigo, bool li
 
     while (atual)
     {
-        arvore = inserirNaArvore(arvore, atual, coluna);
+        arvore = inserirNaArvorePet(arvore, atual, coluna);
         atual = atual->prox;
     }
 
-    percorrerEmOrdem(arvore, coluna, listaOCodigo, listaOCodigoPessoa, listaONome, listaOCodigoTipo);
-    liberarArvore(&arvore);
+    percorrerEmOrdemPet(arvore, coluna, listaOCodigo, listaOCodigoPessoa, listaONome, listaOCodigoTipo);
+    liberarArvorePet(&arvore);
 }

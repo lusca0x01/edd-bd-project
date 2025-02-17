@@ -29,7 +29,7 @@ int compararPessoas(Pessoa *p1, Pessoa *p2, const char *coluna)
     return 0;
 }
 
-ArvorePessoa *inserirNaArvore(ArvorePessoa *raiz, Pessoa *pessoa, const char *coluna)
+ArvorePessoa *inserirNaArvorePessoa(ArvorePessoa *raiz, Pessoa *pessoa, const char *coluna)
 {
     if (raiz == NULL)
     {
@@ -41,11 +41,11 @@ ArvorePessoa *inserirNaArvore(ArvorePessoa *raiz, Pessoa *pessoa, const char *co
 
     if (compararPessoas(pessoa, raiz->pessoa, coluna) < 0)
     {
-        raiz->esq = inserirNaArvore(raiz->esq, pessoa, coluna);
+        raiz->esq = inserirNaArvorePessoa(raiz->esq, pessoa, coluna);
     }
     else
     {
-        raiz->dir = inserirNaArvore(raiz->dir, pessoa, coluna);
+        raiz->dir = inserirNaArvorePessoa(raiz->dir, pessoa, coluna);
     }
 
     return raiz;
@@ -83,23 +83,23 @@ void imprimirPessoa(Pessoa *pessoa, bool listaOCodigo, bool listaONome, bool lis
     printf("\n");
 }
 
-void percorrerEmOrdem(ArvorePessoa *raiz, const char *coluna, bool listaOCodigo, bool listaONome, bool listaOTelefone, bool listaOEndereco, bool listaONascimento)
+void percorrerEmOrdemPessoa(ArvorePessoa *raiz, const char *coluna, bool listaOCodigo, bool listaONome, bool listaOTelefone, bool listaOEndereco, bool listaONascimento)
 {
     if (raiz == NULL)
         return;
 
-    percorrerEmOrdem(raiz->esq, coluna, listaOCodigo, listaONome, listaOTelefone, listaOEndereco, listaONascimento);
+    percorrerEmOrdemPessoa(raiz->esq, coluna, listaOCodigo, listaONome, listaOTelefone, listaOEndereco, listaONascimento);
     imprimirPessoa(raiz->pessoa, listaOCodigo, listaONome, listaOTelefone, listaOEndereco, listaONascimento);
-    percorrerEmOrdem(raiz->dir, coluna, listaOCodigo, listaONome, listaOTelefone, listaOEndereco, listaONascimento);
+    percorrerEmOrdemPessoa(raiz->dir, coluna, listaOCodigo, listaONome, listaOTelefone, listaOEndereco, listaONascimento);
 }
 
-void liberarArvore(ArvorePessoa **raiz)
+void liberarArvorePessoa(ArvorePessoa **raiz)
 {
     if (*raiz == NULL)
         return;
 
-    liberarArvore(&(*raiz)->esq);
-    liberarArvore(&(*raiz)->dir);
+    liberarArvorePessoa(&(*raiz)->esq);
+    liberarArvorePessoa(&(*raiz)->dir);
 
     free(*raiz);
     *raiz = NULL;
@@ -117,10 +117,10 @@ void listarPessoasOrderBy(Pessoa *raiz, const char *coluna, bool listaOCodigo, b
 
     while (atual)
     {
-        arvore = inserirNaArvore(arvore, atual, coluna);
+        arvore = inserirNaArvorePessoa(arvore, atual, coluna);
         atual = atual->prox;
     }
 
-    percorrerEmOrdem(arvore, coluna, listaOCodigo, listaONome, listaOTelefone, listaOEndereco, listaONascimento);
-    liberarArvore(&arvore);
+    percorrerEmOrdemPessoa(arvore, coluna, listaOCodigo, listaONome, listaOTelefone, listaOEndereco, listaONascimento);
+    liberarArvorePessoa(&arvore);
 }

@@ -3,7 +3,7 @@
 
 typedef struct ArvoreTipoPet {
     struct TipoPet *tipo_pet;
-    struct ArvorePet *esq, *dir;
+    struct ArvoreTipoPet *esq, *dir;
 } ArvoreTipoPet;
 
 void listarTiposPetOrderBy(TipoPet *raiz, const char *coluna, bool listaOCodigo, bool listaADescricao);
