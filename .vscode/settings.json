@@ -4,6 +4,7 @@
         "string.h": "c",
         "tipo_pet.h": "c",
         "stdbool.h": "c",
-        "cwchar": "cpp"
+        "cwchar": "cpp",
+        "arvore_tipo_pet.h": "c"
     }
 }

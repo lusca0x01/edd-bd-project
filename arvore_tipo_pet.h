@@ -2,11 +2,11 @@
 #define ARVORE_TIPO_PET_H
 
 typedef struct ArvoreTipoPet {
-    struct TipoPet *pet;
+    struct TipoPet *tipo_pet;
     struct ArvorePet *esq, *dir;
 } ArvoreTipoPet;
 
-void listarPetsOrderBy(Pet *raiz, const char *coluna, bool listaOCodigo, bool listaOCodigoPessoa, bool listaONome, bool listaOCodigoTipo);
-void imprimirPet(Pet *pet, bool listaOCodigo, bool listaOCodigoPessoa, bool listaONome, bool listaOCodigoTipo);
+void listarTiposPetOrderBy(TipoPet *raiz, const char *coluna, bool listaOCodigo, bool listaOCodigoPessoa, bool listaONome, bool listaOCodigoTipo);
+void imprimirTipoPet(TipoPet *tipo_pet, bool listaOCodigo, bool listaOCodigoPessoa, bool listaONome, bool listaOCodigoTipo);
 
 #endif
