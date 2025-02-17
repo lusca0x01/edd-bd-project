@@ -6,7 +6,7 @@ typedef struct ArvoreTipoPet {
     struct ArvorePet *esq, *dir;
 } ArvoreTipoPet;
 
-void listarTiposPetOrderBy(TipoPet *raiz, const char *coluna, bool listaOCodigo, bool listaOCodigoPessoa, bool listaONome, bool listaOCodigoTipo);
-void imprimirTipoPet(TipoPet *tipo_pet, bool listaOCodigo, bool listaOCodigoPessoa, bool listaONome, bool listaOCodigoTipo);
+void listarTiposPetOrderBy(TipoPet *raiz, const char *coluna, bool listaOCodigo, bool listaADescricao);
+void imprimirTipoPet(TipoPet *tipo_pet, bool listaOCodigo, bool listaADescricao);
 
 #endif

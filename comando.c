@@ -4,7 +4,8 @@
 #include <stdbool.h>
 #include "comando.h"
 #include "arvore_pessoa.h"
-#include "pessoa.h"
+#include "arvore_pet.h"
+#include "arvore_tipo_pet.h"
 
 
 void inicializarFila(FilaComandos *fila)

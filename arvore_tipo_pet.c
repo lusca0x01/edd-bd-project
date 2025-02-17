@@ -39,7 +39,7 @@ ArvoreTipoPet *inserirNaArvore(ArvoreTipoPet *raiz, TipoPet *tipo_pet, const cha
     return raiz;
 }
 
-void imprimirPet(TipoPet *tipo_pet, bool listaOCodigo, bool listaADescricao)
+void imprimirTipoPet(TipoPet *tipo_pet, bool listaOCodigo, bool listaADescricao)
 {
     bool primeiroCampo = true;
 
@@ -79,7 +79,7 @@ void liberarArvore(ArvoreTipoPet **raiz)
     *raiz = NULL;
 }
 
-void listarPetsOrderBy(TipoPet *raiz, const char *coluna, bool listaOCodigo, bool listaADescricao)
+void listarTiposPetOrderBy(TipoPet *raiz, const char *coluna, bool listaOCodigo, bool listaADescricao)
 {
     if (!raiz)
     {
