@@ -202,8 +202,11 @@ void processarComandos(FilaComandos *fila, Pessoa **listaPessoas, TipoPet **list
                         else
                             listarPessoas(*listaPessoas, true, true, true, true, true, codigo);
                     }
-                    else
+                    else{
+                        if (possuiOrderBy)
+                            listarPessoasOrderBy(*listaPessoas, colunaOrdenacao, listaOCodigo, listaONome, listaOTelefone, listaOEndereco, listaONascimento);
                         listarPessoas(*listaPessoas, listaOCodigo, listaONome, listaOTelefone, listaOEndereco, listaONascimento, codigo);
+                    }
                 }
                 else if (strstr(comando, "from tipo_pet"))
                 {
@@ -219,12 +222,16 @@ void processarComandos(FilaComandos *fila, Pessoa **listaPessoas, TipoPet **list
                             codigo = -1;
                         }
                     }
-                    //implementar order by
                     if (strstr(comando, "*")){
+                        if (possuiOrderBy)
+                            listarTiposPetOrderBy(*listaTiposPet, colunaOrdenacao, true, true);
                         listarTiposPet(*listaTiposPet, true, true, codigo);
                     }
-                    else
+                    else{
+                        if (possuiOrderBy)
+                            listarTiposPetOrderBy(*listaTiposPet, colunaOrdenacao, listaOCodigo, listaADescricao);
                         listarTiposPet(*listaTiposPet, listaOCodigo, listaADescricao, codigo);
+                    }
                 }
                 else if (strstr(comando, "from pet"))
                 {
@@ -242,11 +249,17 @@ void processarComandos(FilaComandos *fila, Pessoa **listaPessoas, TipoPet **list
                             codigo = -1;
                         }
                     }
-                    //implementar order by
                     if (strstr(comando, "*"))
+                    {
+                        if (possuiOrderBy)
+                            listarPetsOrderBy(*listaPets, colunaOrdenacao, true, true, true, true);
                         listarPets(*listaPets, true, true, true, true, codigo);
-                    else
+                    }
+                    else{
+                        if (possuiOrderBy)
+                            listarPetsOrderBy(*listaPets, colunaOrdenacao, listaOCodigo, listaOCodigoPessoa, listaONome, listaOCodigoTipo);
                         listarPets(*listaPets, listaOCodigo, listaOCodigoPessoa, listaONome, listaOCodigoTipo, codigo);
+                    }
                 }
             }
             else
