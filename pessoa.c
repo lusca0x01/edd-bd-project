@@ -107,6 +107,12 @@ void atualizarPessoaPorNome(Pessoa *lista, char nome[50], Pessoa novaPessoa)
 
 void inserirPessoa(Pessoa **lista, Pessoa novaPessoa)
 {
+    if (novaPessoa.codigo == 0 || novaPessoa.data_nascimento == NULL || novaPessoa.nome == NULL)
+    {
+        printf("Erro: O comando de pessoa não leva todos os dados obrigatórios!\n");
+        return;
+    }
+
     if (buscarPessoaPorCodigo(*lista, novaPessoa.codigo))
     {
         printf("Erro: Código de pessoa já existe!\n");

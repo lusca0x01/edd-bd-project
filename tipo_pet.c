@@ -93,9 +93,16 @@ void atualizarTipoPetPorDescricao(TipoPet *lista, char descricao[50], TipoPet no
     tipo_pet->descricao[sizeof(tipo_pet->descricao) - 1] = '\0';
 }
 
-void inserirTipoPet(TipoPet **lista, TipoPet novaTipoPet)
+void inserirTipoPet(TipoPet **lista, TipoPet novoTipoPet)
 {
-    if (buscarTipoPetPorCodigo(*lista, novaTipoPet.codigo))
+
+    if (novoTipoPet.codigo == 0 || novoTipoPet.descricao == NULL)
+    {
+        printf("Erro: O comando de tipo pet não leva todos os dados obrigatórios!\n");
+        return;
+    }
+
+    if (buscarTipoPetPorCodigo(*lista, novoTipoPet.codigo))
     {
         printf("Erro: Código de TipoPet já existe!\n");
         return;
@@ -108,7 +115,7 @@ void inserirTipoPet(TipoPet **lista, TipoPet novaTipoPet)
         return;
     }
 
-    *novo = novaTipoPet;
+    *novo = novoTipoPet;
     novo->prox = *lista;
     novo->ant = NULL;
 

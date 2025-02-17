@@ -95,6 +95,13 @@ void atualizarPetPorNome(Pet *lista, char nome[50], Pet novoPet)
 
 void inserirPet(Pet **lista, Pet novoPet)
 {
+
+    if (novoPet.codigo == 0 || novoPet.codigo_pes == 0 || novoPet.codigo_tipo == 0 || novoPet.nome == NULL)
+    {
+        printf("Erro: O comando de pet não leva todos os dados obrigatórios!\n");
+        return;
+    }
+
     if (buscarPetPorCodigo(*lista, novoPet.codigo))
     {
         printf("Erro: Código de Pet já existe!\n");
