@@ -224,9 +224,11 @@ void processarComandos(FilaComandos *fila, Pessoa **listaPessoas, TipoPet **list
                         }
                     }
                     if (strstr(comando, "*")){
-                        if (possuiOrderBy)
+                        if (possuiOrderBy){
                             listarTiposPetOrderBy(*listaTiposPet, colunaOrdenacao, true, true);
+                        }else{
                         listarTiposPet(*listaTiposPet, true, true, codigo);
+                        }
                     }
                     else{
                         if (possuiOrderBy)
@@ -252,14 +254,17 @@ void processarComandos(FilaComandos *fila, Pessoa **listaPessoas, TipoPet **list
                     }
                     if (strstr(comando, "*"))
                     {
-                        if (possuiOrderBy)
+                        if (possuiOrderBy){
                             listarPetsOrderBy(*listaPets, colunaOrdenacao, true, true, true, true);
+                        }else
                         listarPets(*listaPets, true, true, true, true, codigo);
                     }
                     else{
-                        if (possuiOrderBy)
+                        if (possuiOrderBy){
                             listarPetsOrderBy(*listaPets, colunaOrdenacao, listaOCodigo, listaOCodigoPessoa, listaONome, listaOCodigoTipo);
+                        } else
                         listarPets(*listaPets, listaOCodigo, listaOCodigoPessoa, listaONome, listaOCodigoTipo, codigo);
+                        
                     }
                 }
             }

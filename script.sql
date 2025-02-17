@@ -9,6 +9,4 @@ insert into pessoa(codigo, nome, fone, data_nascimento) values(6, 'Aosé', '8599
 insert into pessoa(codigo, nome, fone, data_nascimento) values(7, 'Bosé', '859997788', '04/10/2001');
 insert into pet(codigo, codigo_cli, nome, codigo_tipo) values(2, 1, 'brother', 1);
 insert into pet(codigo, codigo_cli, nome, codigo_tipo) values(3, 2, 'minie', 1);
-select * from pet where codigo = 3 ;
-delete from pet where codigo = 3 ;
-select * from pessoa order by codigo;
+select * from pet order by
