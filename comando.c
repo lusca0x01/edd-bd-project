@@ -74,6 +74,8 @@ void processarComandos(FilaComandos *fila, Pessoa **listaPessoas, TipoPet **list
     {
         if (validarComando(comando))
         {
+            char colunaOrdenacao[50] = {0};
+            int possuiOrderBy = temOrderBy(comando, colunaOrdenacao);
             if (strstr(comando, "insert into"))
             {
                 if (strstr(comando, "insert into pessoa"))
@@ -190,7 +192,7 @@ void processarComandos(FilaComandos *fila, Pessoa **listaPessoas, TipoPet **list
                             codigo = -1;
                         }
                     }
-
+                    //implementar order by
                     if (strstr(comando, "*"))
                         listarPessoas(*listaPessoas, true, true, true, true, true, codigo);
                     else
@@ -210,7 +212,7 @@ void processarComandos(FilaComandos *fila, Pessoa **listaPessoas, TipoPet **list
                             codigo = -1;
                         }
                     }
-
+                    //implementar order by
                     if (strstr(comando, "*"))
                         listarTiposPet(*listaTiposPet, true, true, codigo);
                     else
@@ -232,7 +234,7 @@ void processarComandos(FilaComandos *fila, Pessoa **listaPessoas, TipoPet **list
                             codigo = -1;
                         }
                     }
-
+                    //implementar order by
                     if (strstr(comando, "*"))
                         listarPets(*listaPets, true, true, true, true, codigo);
                     else
@@ -250,4 +252,13 @@ void processarComandos(FilaComandos *fila, Pessoa **listaPessoas, TipoPet **list
         }
         free(comando);
     }
+}
+
+int temOrderBy(char *comando, char *colunaOrdenacao){
+    char *orderByPos = strstr(comando, "order by");
+    if (orderByPos) {
+        sscanf(orderByPos, "order by %s", colunaOrdenacao);
+        return 1;
+    }
+    return 0;
 }
